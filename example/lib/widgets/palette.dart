@@ -1,12 +1,10 @@
+import 'package:example/app/app_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nice_gradients/nice_gradients.dart';
 
 enum PaletteSide { Left, Right }
 
-final circleSize = 45.0;
-final horizontalPadding = 35.0;
-final verticalPadding = 24.0;
 
 class Palette extends StatelessWidget {
   final PaletteSide side;
@@ -23,10 +21,11 @@ class Palette extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context).paletteTheme;
     return Container(
-      width: circleSize + horizontalPadding,
+      width: theme.circleSize + theme.horizontalPadding,
       child: ListView.builder(
-        padding: margin,
+        padding: getMargin(context),
         itemCount: niceGradients.length,
         itemBuilder: (context, index) {
           final gradient = niceGradients[index];
@@ -46,12 +45,13 @@ class Palette extends StatelessWidget {
     );
   }
 
-  EdgeInsets get margin {
+  EdgeInsets getMargin(BuildContext context) {
+    final theme = AppTheme.of(context).paletteTheme;
     switch (side) {
       case PaletteSide.Left:
-        return EdgeInsets.only(left: horizontalPadding);
+        return EdgeInsets.only(left: theme.horizontalPadding);
       case PaletteSide.Right:
-        return EdgeInsets.only(right: horizontalPadding);
+        return EdgeInsets.only(right: theme.horizontalPadding);
       default:
         throw UnimplementedError();
     }
@@ -70,9 +70,10 @@ class CircleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context).paletteTheme;
     return Container(
-      margin: EdgeInsets.symmetric(vertical: verticalPadding),
-      height: circleSize,
+      margin: EdgeInsets.symmetric(vertical: theme.verticalPadding),
+      height: theme.circleSize,
       child: ClipOval(
         child: Container(
             decoration: isSelected ? _selectedDecoration : _normalDecoration),

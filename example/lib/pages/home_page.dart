@@ -5,7 +5,6 @@ import 'package:example/widgets/palette.dart';
 import 'package:example/widgets/sphere.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_nice_gradients/nice_gradients.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {

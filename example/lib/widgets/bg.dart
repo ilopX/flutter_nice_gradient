@@ -1,7 +1,6 @@
 import 'package:example/model/model.dart';
 import 'package:example/vendor/consume_value_notifier.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_nice_gradients/nice_gradients.dart';
 import 'package:provider/provider.dart';
 
 class Bg extends StatelessWidget {

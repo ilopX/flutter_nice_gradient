@@ -11,7 +11,7 @@ class App extends StatelessWidget {
       title: 'Nice gradients',
       debugShowCheckedModeBanner: false,
       theme: Provider.of<AppTheme>(context).materialTheme,
-      home: Transform.scale(scale: 1.0, child: HomePage()),
+      home: HomePage(),
     );
   }
 }

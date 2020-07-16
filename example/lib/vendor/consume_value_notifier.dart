@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class ConsumeValueNotifier<T extends ValueNotifier<C>, C> extends StatefulWidget {
-  final T valueNotifier;
-  final Widget Function(BuildContext context, T valueNotifier) builder;
+class ConsumeValueNotifier<C> extends StatefulWidget {
+  final ValueNotifier<C> valueNotifier;
+  final Widget Function(BuildContext context, ValueNotifier<C>  valueNotifier) builder;
 
   const ConsumeValueNotifier({
     Key key,
@@ -14,7 +14,7 @@ class ConsumeValueNotifier<T extends ValueNotifier<C>, C> extends StatefulWidget
   _ConsumeValueNotifierState createState() => _ConsumeValueNotifierState();
 }
 
-class _ConsumeValueNotifierState extends State<ConsumeValueNotifier> {
+class _ConsumeValueNotifierState<C> extends State<ConsumeValueNotifier<C>> {
   @override
   void initState() {
 //    print('init');

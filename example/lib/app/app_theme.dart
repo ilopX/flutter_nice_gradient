@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AppTheme {
+  double scale = 0.5;
+
   final materialTheme = ThemeData(
-    primarySwatch: Colors.blue,
+    primarySwatch: Colors.indigo,
     visualDensity: VisualDensity.adaptivePlatformDensity,
     textTheme: TextTheme(
       bodyText1: TextStyle(

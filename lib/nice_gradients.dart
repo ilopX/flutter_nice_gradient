@@ -69,12 +69,6 @@ final niceGradients = [
   ),
   LinearGradient(
     begin: Alignment(-0.97, -0.97),
-    end: Alignment(0.95, 0.96),
-    colors: [const Color(0xff46cefc), const Color(0xff8420ca)],
-    stops: [0.0, 1.0],
-  ),
-  LinearGradient(
-    begin: Alignment(-0.97, -0.97),
     end: Alignment(1.0, 1.0),
     colors: [const Color(0xff28f29c), const Color(0xff0cb8e0)],
     stops: [0.0, 1.0],

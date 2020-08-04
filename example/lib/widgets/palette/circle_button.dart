@@ -1,19 +1,17 @@
-import 'package:example/widgets/palette/palette.dart';
+import 'package:example/app/app_theme.dart';
 import 'package:flutter/material.dart';
 
-class PaletteCircleButton extends StatefulWidget {
+class CircleButton extends StatefulWidget {
   final PaletteSide side;
   final bool isSelected;
   final LinearGradient gradient;
   final void Function(LinearGradient setGradient) onTap;
   final void Function(bool isVisible) onShowCodePanel;
 
-  final EdgeInsets margin;
 
-  const PaletteCircleButton({
+  const CircleButton({
     Key key,
     @required this.gradient,
-    this.margin,
     this.onTap,
     this.onShowCodePanel,
     @required this.isSelected,
@@ -21,16 +19,16 @@ class PaletteCircleButton extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _PaletteCircleButtonState createState() => _PaletteCircleButtonState();
+  _CircleButtonState createState() => _CircleButtonState();
 }
 
-class _PaletteCircleButtonState extends State<PaletteCircleButton> {
+class _CircleButtonState extends State<CircleButton> {
   bool _isHover = false;
 
   @override
   Widget build(BuildContext context) {
     var circlePlusCodeButton = [
-      buildOval(),
+      buildOval(context),
       codeButton(),
     ]..removeWhere((element) => element == null);
 
@@ -48,13 +46,14 @@ class _PaletteCircleButtonState extends State<PaletteCircleButton> {
     throw UnimplementedError();
   }
 
-  Widget buildOval() {
+  Widget buildOval(BuildContext context) {
+    var theme = AppTheme.of(context);
     return Container(
-      margin: widget.margin,
+      margin: theme.circleButtonMargin,
       child: ClipOval(
         child: Container(
-          width: 45,
-          height: 45,
+          width: theme.circleButtonSize,
+          height: theme.circleButtonSize,
           decoration:
               widget.isSelected ? _selectedDecoration : _normalDecoration,
           child: buildMouseDetector(
@@ -76,11 +75,10 @@ class _PaletteCircleButtonState extends State<PaletteCircleButton> {
           widget.onShowCodePanel(true);
         },
         child: Container(
-          margin: widget.margin,
           padding: EdgeInsets.all(10),
           color: Colors.black.withOpacity(_isHover ? 1.0 : 0.5),
           child: Text(
-            'Code1',
+            'Code',
             style: TextStyle(color: Colors.white),
           ),
         ),

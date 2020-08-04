@@ -1,11 +1,11 @@
-import 'package:example/app/inject_model.dart';
+import 'package:example/app/app.dart' as app;
+import 'package:example/app/config.dart' as app;
 import 'package:flutter/material.dart';
-import 'app/app.dart';
 
 void main() {
   runApp(
-    InjectModel(
-      child: App(),
+    app.Config(
+      child: app.App(),
     ),
   );
 }

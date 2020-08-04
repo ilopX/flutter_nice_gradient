@@ -1,3 +1,4 @@
+import 'package:example/app/app_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:adobe_xd/gradient_xd_transform.dart';
@@ -14,34 +15,47 @@ class Sphere extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = AppTheme.of(context).sphereSize;
+
     return Container(
       constraints: BoxConstraints.expand(),
       alignment: Alignment.center,
       child: CustomPaint(
-        size: Size(362.0, 362.0),
+        size: Size(size, size),
         painter: SpherePainter(gradient),
-
       ),
     );
   }
 }
 
 class SpherePainter extends CustomPainter {
-  static final size = 362.0;
-  final mainRect = Rect.fromLTWH(0, 0, size, size);
+  final mainRect = Rect.fromLTWH(0, 0, 362.0, 362.0);
   final Gradient gradient;
 
   SpherePainter(this.gradient);
 
   @override
   void paint(Canvas canvas, Size size) {
+    final scale = size.width / mainRect.width;
+    canvas.scale(scale);
+
     final bottomShadowGradient = RadialGradient(
       center: Alignment(0.0, 0.0),
       radius: 0.5,
-      colors: [const Color(0xff000000), const Color(0x00000000)],
+      colors: [
+        const Color(0xff000000),
+        const Color(0x00000000),
+      ],
       stops: [0.0, 1.0],
       transform: GradientXDTransform(
-          1.0, 0.0, 0.0, 1.0, 0.0, 0.0, Alignment(0.0, 0.0)),
+        1.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        Alignment(0.0, 0.0),
+      ),
     );
 
     final shadowRect = Rect.fromLTWH(80, 333, 201, 58);

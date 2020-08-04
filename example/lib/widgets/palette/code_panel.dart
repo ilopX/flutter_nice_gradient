@@ -1,12 +1,21 @@
+import 'package:example/model/gradient_string.dart';
+import 'package:example/vendor/reverse_if.dart';
 import 'package:example/app/app_theme.dart';
+import 'package:example/widgets/palette/gradient_text_representation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CodePanel extends StatelessWidget {
+  final LinearGradient gradient;
   final PaletteSide side;
   final void Function() onClose;
 
-  const CodePanel({Key key, this.side, this.onClose}) : super(key: key);
+  const CodePanel({
+    Key key,
+    @required this.side,
+    @required this.onClose,
+    @required this.gradient,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,17 +23,15 @@ class CodePanel extends StatelessWidget {
     return Container(
       height: theme.lineHeight,
       width: theme.paletteWidth,
-
       child: OverflowBox(
         maxHeight: theme.overflowHeight,
         child: Container(
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.5),
-            borderRadius: BorderRadius.all(
-              Radius.circular(10),
-            ),
+          child: Row(
+            children: [
+              buildPrefixPanel(context),
+              buildTextPanel(),
+            ].reversedIf(side != PaletteSide.Left),
           ),
-          child: Row(children: row(context)),
         ),
       ),
     );
@@ -35,28 +42,48 @@ class CodePanel extends StatelessWidget {
       width: AppTheme.of(context).overflowPrefixPanelWidth,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: side == PaletteSide.Left ? BorderRadius.only(
-          topLeft: Radius.circular(10),
-          bottomLeft: Radius.circular(10),
-        ) : BorderRadius.only(
-          topRight: Radius.circular(10),
-          bottomRight: Radius.circular(10),
+        borderRadius: leftRadius(side != PaletteSide.Left)
+      ),
+    );
+  }
+
+  Widget buildTextPanel() {
+    return Expanded(
+      child: Container(
+        alignment: Alignment.centerLeft,
+        padding: EdgeInsets.only(left: 10),
+        constraints: BoxConstraints.expand(),
+        decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.68),
+          border: Border.all(color: Colors.white, width: 1),
+          borderRadius: leftRadius(side == PaletteSide.Left)
+        ),
+        child: GradientTextRepresentation(
+          gradientString: GradientString(gradient: gradient),
         ),
       ),
     );
   }
 
-  row(BuildContext context) {
-    final row = [
-      buildPrefixPanel(context),
-      Expanded(
-        child: Container(
-          height: AppTheme.of(context).lineHeight,
-
-          child: SelectableText('some'),
-        ),
-      ),
-    ];
-    return side == PaletteSide.Left ? row : row.reversed.toList();
+  leftRadius(bool reverse) {
+    return reverse
+        ? rightBorderRadius()
+        : leftBorderRadius();
   }
+
+  leftBorderRadius() {
+    return BorderRadius.only(
+      topLeft: Radius.circular(10),
+      bottomLeft: Radius.circular(10),
+    );
+  }
+
+  rightBorderRadius() {
+    return BorderRadius.only(
+      topRight: Radius.circular(10),
+      bottomRight: Radius.circular(10),
+    );
+  }
+
+
 }

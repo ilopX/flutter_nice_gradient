@@ -1,5 +1,6 @@
 import 'package:example/app/app_theme.dart';
-import 'package:example/widgets/palette/item_builder.dart';
+import 'package:example/widgets/palette/circle_button.dart';
+import 'package:example/widgets/palette/code_panel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nice_gradients/nice_gradients.dart';
@@ -23,19 +24,12 @@ class Palette extends StatefulWidget {
 class PaletteState extends State<Palette> {
   bool _isCodeShow = false;
 
-  ItemBuilder _paletteItemBuilder;
+  bool get isCodeShow => _isCodeShow;
 
-  @override
-  void initState() {
-    initPaletteItemBuilder();
-
-    super.initState();
-  }
-
-  @override
-  void reassemble() {
-    initPaletteItemBuilder();
-    super.reassemble();
+  set isCodeShow(bool visible) {
+    setState(() {
+      _isCodeShow = visible;
+    });
   }
 
   @override
@@ -43,9 +37,10 @@ class PaletteState extends State<Palette> {
     return Align(
       alignment: align,
       child: Container(
-          margin: AppTheme.of(context).getPaletteMargin(widget.side),
-          width: AppTheme.of(context).paletteWidth,
-          child: buildGradientList()),
+        margin: AppTheme.of(context).getPaletteMargin(widget.side),
+        width: AppTheme.of(context).paletteWidth,
+        child: buildGradientList(),
+      ),
     );
   }
 
@@ -58,32 +53,33 @@ class PaletteState extends State<Palette> {
       itemBuilder: (context, index) {
         return isLasOrFirst(index)
             ? SizedBox(
-                height: AppTheme.of(context).overflowVerticalPadding*2,
+                height: AppTheme.of(context).overflowVerticalPadding * 2,
               )
-            : _paletteItemBuilder.buildItem(niceGradients[index]);
+            : buildLine(niceGradients[index]);
       },
     );
   }
 
-  void initPaletteItemBuilder() {
-    _paletteItemBuilder = ItemBuilder(
+  Widget buildLine(LinearGradient gradient) {
+    return Stack(
+      children: [
+        if (isCodeShow && widget.selectedGradient == gradient)
+          CodePanel(
+            side: widget.side,
+            gradient: widget.selectedGradient
+          ),
+        buildCircleButton(gradient),
+      ],
+    );
+  }
+
+  Widget buildCircleButton(LinearGradient gradient) {
+    return CircleButton(
       side: widget.side,
-      isCodePanelVisible: () => _isCodeShow,
-      currentGradient: () => widget.selectedGradient,
-      onTapGradient: (gradient) {
-        if (gradient == widget.selectedGradient) {
-          setState(() {
-            _isCodeShow = !_isCodeShow;
-          });
-        } else if (widget.onPickGradient != null) {
-          widget.onPickGradient(gradient);
-        }
-      },
-      onCodePanelVisible: (bool isVisible) {
-        setState(() {
-          _isCodeShow = isVisible;
-        });
-      },
+      isSelected: widget.selectedGradient == gradient && !isCodeShow,
+      gradient: gradient,
+      onTap: widget.onPickGradient,
+      onShowCodePanel: (isVisible) => isCodeShow = isVisible,
     );
   }
 

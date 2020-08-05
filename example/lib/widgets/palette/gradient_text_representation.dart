@@ -17,8 +17,9 @@ class GradientTextRepresentation extends StatelessWidget {
     return Text.rich(
       TextSpan(
         style: TextStyle(
-          fontFamily: 'Segoe UI',
+          fontFamily: 'Segoe',
           fontSize: 12,
+          height: 1.3,
           color: const Color(0xffffffff),
         ),
         children: [

@@ -22,16 +22,6 @@ class Palette extends StatefulWidget {
 }
 
 class PaletteState extends State<Palette> {
-  bool _isCodeShow = false;
-
-  bool get isCodeShow => _isCodeShow;
-
-  set isCodeShow(bool visible) {
-    setState(() {
-      _isCodeShow = visible;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -63,7 +53,7 @@ class PaletteState extends State<Palette> {
   Widget buildLine(LinearGradient gradient) {
     return Stack(
       children: [
-        if (isCodeShow && widget.selectedGradient == gradient)
+        if (isCodeVisible && widget.selectedGradient == gradient)
           CodePanel(
             side: widget.side,
             gradient: widget.selectedGradient
@@ -76,11 +66,21 @@ class PaletteState extends State<Palette> {
   Widget buildCircleButton(LinearGradient gradient) {
     return CircleButton(
       side: widget.side,
-      isSelected: widget.selectedGradient == gradient && !isCodeShow,
+      isSelected: widget.selectedGradient == gradient && !isCodeVisible,
       gradient: gradient,
       onTap: widget.onPickGradient,
-      onShowCodePanel: (isVisible) => isCodeShow = isVisible,
+      onShowCodePanel: (isVisible) => isCodeVisible = isVisible,
     );
+  }
+
+  bool _isCodeVisible = false;
+
+  bool get isCodeVisible => _isCodeVisible;
+
+  set isCodeVisible(bool visible) {
+    setState(() {
+      _isCodeVisible = visible;
+    });
   }
 
   bool isLasOrFirst(index) {

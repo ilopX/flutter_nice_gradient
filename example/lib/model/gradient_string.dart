@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -23,8 +22,8 @@ class GradientString {
       _color2 = second.toString();
     });
 
-      _stop1 = gradient.stops.first.toString();
-      _stop2 = gradient.stops.last.toString();
+    _stop1 = gradient.stops.first.toString();
+    _stop2 = gradient.stops.last.toString();
   }
 
   String _beginX;
@@ -67,10 +66,10 @@ class GradientString {
       apply('1.0', '1.0');
       return;
     }
-    print(raw);
-    final regExp = RegExp('\\(($numberPattern|$colorPattern)\\)?(, [^(]*($numberPattern|\\($colorPattern)\\))?');
-    var matchPoints = regExp.firstMatch(raw);
 
+    final regExp = RegExp('\\(($numberPattern|$colorPattern)\\)?(, '
+        '[^(]*($numberPattern|\\($colorPattern)\\))?');
+    var matchPoints = regExp.firstMatch(raw);
     try {
       final fistGroup = matchPoints.group(1);
       final secondGroup = matchPoints.group(3);
@@ -79,6 +78,4 @@ class GradientString {
       apply(null, null);
     }
   }
-
-
 }

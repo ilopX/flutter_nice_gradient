@@ -1,6 +1,7 @@
 import 'package:example/app/app_theme.dart';
 import 'package:example/model/model.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Config extends StatelessWidget {
@@ -25,8 +26,15 @@ class Config extends StatelessWidget {
           horizontal: 27,
           vertical: 23,
         ),
-        lineBodyWidth: 340,
+        lineBodyWidth: 344,
         overflowVerticalPadding: 16,
+        prefixPanelColor: Colors.black.withOpacity(0.68),
+        materialTheme: ThemeData(
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          buttonTheme: ButtonThemeData(
+            buttonColor: Colors.black.withOpacity(0.68),
+          )
+        ),
         child: child,
       ),
     );

@@ -4,6 +4,7 @@ import 'package:example/app/app_theme.dart';
 import 'package:example/widgets/palette/gradient_text_representation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CodePanel extends StatelessWidget {
   final LinearGradient gradient;
@@ -29,7 +30,7 @@ class CodePanel extends StatelessWidget {
           child: Row(
             children: [
               buildPrefixPanel(context),
-              buildTextPanel(),
+              buildTextPanel(context),
             ].reversedIf(side != PaletteSide.Left),
           ),
         ),
@@ -41,34 +42,33 @@ class CodePanel extends StatelessWidget {
     return Container(
       width: AppTheme.of(context).overflowPrefixPanelWidth,
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: leftRadius(side != PaletteSide.Left)
-      ),
+          color: Colors.white,
+          borderRadius: leftRadius(side != PaletteSide.Left)),
     );
   }
 
-  Widget buildTextPanel() {
+  Widget buildTextPanel(BuildContext context) {
     return Expanded(
       child: Container(
-        alignment: Alignment.centerLeft,
-        padding: EdgeInsets.only(left: 10),
-        constraints: BoxConstraints.expand(),
-        decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.68),
-          border: Border.all(color: Colors.white, width: 1),
-          borderRadius: leftRadius(side == PaletteSide.Left)
-        ),
-        child: GradientTextRepresentation(
-          gradientString: GradientString(gradient: gradient),
-        ),
-      ),
+          padding: EdgeInsets.all(10),
+          constraints: BoxConstraints.expand(),
+          decoration: BoxDecoration(
+              color: AppTheme.of(context).prefixPanelColor,
+              border: Border.all(color: Colors.white, width: 1),
+              borderRadius: leftRadius(side == PaletteSide.Left)),
+          child: Stack(
+            children: [
+              GradientTextRepresentation(
+                gradientString: GradientString(gradient: gradient),
+              ),
+              buildCopyButton()
+            ],
+          )),
     );
   }
 
   leftRadius(bool reverse) {
-    return reverse
-        ? rightBorderRadius()
-        : leftBorderRadius();
+    return reverse ? rightBorderRadius() : leftBorderRadius();
   }
 
   leftBorderRadius() {
@@ -85,5 +85,33 @@ class CodePanel extends StatelessWidget {
     );
   }
 
+  buildCopyButton() {
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: Opacity(
+        opacity: 0.31,
+        child: RawMaterialButton(
 
+          child: Text('Copy'),
+          constraints: BoxConstraints.tight(Size(42, 26)),
+          shape: RoundedRectangleBorder(
+            side:  BorderSide(color: Colors.white),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          fillColor: Colors.black,
+          textStyle: TextStyle(
+            fontSize: 12,
+            fontFamily: 'Segoe',
+            color: Colors.white,
+          ),
+
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          onPressed: () async {
+            final clipboardData = ClipboardData(text: gradient.toString());
+            await Clipboard.setData(clipboardData);
+          },
+        ),
+      ),
+    );
+  }
 }

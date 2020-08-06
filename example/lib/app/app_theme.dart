@@ -12,6 +12,7 @@ class AppTheme extends InheritedWidget {
   final EdgeInsets circleButtonMargin;
   final double lineBodyWidth;
   final double overflowVerticalPadding;
+  final Color prefixPanelColor;
 
   // auto calculate
   final double paletteWidth;
@@ -19,17 +20,9 @@ class AppTheme extends InheritedWidget {
   final double overflowPrefixPanelWidth;
   final double lineHeight;
 
-  final materialTheme = ThemeData(
-    primarySwatch: Colors.indigo,
-    visualDensity: VisualDensity.adaptivePlatformDensity,
-    textTheme: TextTheme(
-      bodyText1: TextStyle(
-        color: Colors.white.withOpacity(0.5),
-      ),
-    ),
-  );
+  final ThemeData materialTheme;
 
-  AppTheme({
+  AppTheme( {
     Key key,
     @required this.scale,
     @required this.paletteSideMargin,
@@ -39,6 +32,8 @@ class AppTheme extends InheritedWidget {
     @required this.circleButtonMargin,
     @required this.lineBodyWidth,
     @required this.overflowVerticalPadding,
+    @required this.prefixPanelColor,
+    @required this.materialTheme,
     @required child,
   })  : paletteWidth = circleButtonMargin.left +
             circleButtonMargin.right +
@@ -69,7 +64,8 @@ class AppTheme extends InheritedWidget {
         oldWidget.circleButtonMargin != circleButtonMargin ||
         oldWidget.lineBodyWidth != lineBodyWidth ||
         oldWidget.overflowVerticalPadding != overflowVerticalPadding ||
-        oldWidget.paletteTopMargin != overflowVerticalPadding;
+        oldWidget.paletteTopMargin != overflowVerticalPadding ||
+        oldWidget.prefixPanelColor != prefixPanelColor;
   }
 
   EdgeInsets getPaletteMargin(PaletteSide side) {

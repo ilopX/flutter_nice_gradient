@@ -18,13 +18,31 @@ class Sphere extends StatelessWidget {
     final size = AppTheme.of(context).sphereSize;
 
     return Container(
-      constraints: BoxConstraints.expand(),
-      alignment: Alignment.center,
-      child: CustomPaint(
-        size: Size(size, size),
-        painter: SpherePainter(gradient),
-      ),
-    );
+        constraints: BoxConstraints.expand(),
+        alignment: Alignment.center,
+        child: Stack(
+          children: [
+            Transform.translate(
+              offset: Offset(94,363),
+              child: Opacity(
+                opacity: 0.8,
+                child: Image(
+                  image: AssetImage('assets/Shadow.png'),
+                ),
+              ),
+            ),
+            CustomPaint(
+              size: Size(size, size),
+              painter: SpherePainter(gradient),
+            ),
+            Transform.translate(
+              offset: Offset(14,28),
+              child: Image(
+                image: AssetImage('assets/ShadowFront.png'),
+              ),
+            ),
+          ],
+        ));
   }
 }
 
@@ -39,36 +57,38 @@ class SpherePainter extends CustomPainter {
     final scale = size.width / mainRect.width;
     canvas.scale(scale);
 
-    final bottomShadowGradient = RadialGradient(
-      center: Alignment(0.0, 0.0),
-      radius: 0.5,
-      colors: [
-        const Color(0xff000000),
-        const Color(0x00000000),
-      ],
-      stops: [0.0, 1.0],
-      transform: GradientXDTransform(
-        1.0,
-        0.0,
-        0.0,
-        1.0,
-        0.0,
-        0.0,
-        Alignment(0.0, 0.0),
-      ),
-    );
+    // build shadow error: https://github.com/AdobeXD/xd-to-flutter-plugin/issues/70
+//    final bottomShadowGradient = RadialGradient(
+//      center: Alignment(0.0, 0.0),
+//      radius: 0.5,
+//      colors: [
+//        const Color(0xff000000),
+//        const Color(0x00000000),
+//      ],
+//      stops: [0.0, 1.0],
+//      transform: GradientXDTransform(
+//        1.0,
+//        0.0,
+//        0.0,
+//        1.0,
+//        0.0,
+//        0.0,
+//        Alignment(0.0, 0.0),
+//      ),
+//    );
+//
+//    final shadowRect = Rect.fromLTWH(80, 333, 201, 58);
+//    canvas.drawOval(shadowRect,
+//        Paint()..shader = bottomShadowGradient.createShader(shadowRect));
+//
+//    canvas.drawShadow(
+//        Path()
+//          ..addOval(mainRect)
+//          ..close(),
+//        Color(0x4da8a8a8),
+//        30,
+//        true);
 
-    final shadowRect = Rect.fromLTWH(80, 333, 201, 58);
-    canvas.drawOval(shadowRect,
-        Paint()..shader = bottomShadowGradient.createShader(shadowRect));
-
-    canvas.drawShadow(
-        Path()
-          ..addOval(mainRect)
-          ..close(),
-        Color(0x4da8a8a8),
-        30,
-        true);
 
     final shader = gradient.createShader(mainRect);
     canvas.drawOval(mainRect, Paint()..shader = shader);
@@ -98,22 +118,23 @@ class SpherePainter extends CustomPainter {
 
     canvas.drawPath(path3, Paint()..color = Colors.white.withOpacity(0.23));
 
-    final shadowGradient = RadialGradient(
-      center: Alignment(0.0, 1.11),
-      radius: 0.778,
-      colors: [
-        const Color(0x3d000000),
-        const Color(0x25000000),
-        const Color(0x01000000),
-        const Color(0x00000000)
-      ],
-      stops: [0.0, 0.322, 0.707, 1.0],
-      transform: GradientXDTransform(
-          1.0, 0.0, 0.0, 0.302, 0.0, 0.738, Alignment(0.0, 1.11)),
-    );
-
-    canvas.drawOval(
-        mainRect, Paint()..shader = shadowGradient.createShader(mainRect));
+    // build shadow error: https://github.com/AdobeXD/xd-to-flutter-plugin/issues/70
+//    final shadowGradient = RadialGradient(
+//      center: Alignment(0.0, 1.11),
+//      radius: 0.778,
+//      colors: [
+//        const Color(0x3d000000),
+//        const Color(0x25000000),
+//        const Color(0x01000000),
+//        const Color(0x00000000)
+//      ],
+//      stops: [0.0, 0.322, 0.707, 1.0],
+//      transform: GradientXDTransform(
+//          1.0, 0.0, 0.0, 0.302, 0.0, 0.738, Alignment(0.0, 1.11)),
+//    );
+//
+//    canvas.drawOval(
+//        mainRect, Paint()..shader = shadowGradient.createShader(mainRect));
   }
 
   @override

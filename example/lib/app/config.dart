@@ -12,28 +12,34 @@ class Config extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-//      key: GlobalKey(),
       providers: [
         Provider(create: (_) => Model()),
       ],
       child: AppTheme(
         scale: 1,
         paletteSideMargin: 19,
-        paletteTopMargin: 16,
         sphereSize: 389,
         circleButtonSize: 46,
-        circleButtonMargin: EdgeInsets.symmetric(
-          horizontal: 27,
-          vertical: 23,
+        prefixPanelWidth: 100,
+        bodyPanelWidth: 344,
+        bodyPanelColor: Colors.black.withOpacity(0.68),
+        gradientTextStyle: const TextStyle(
+          fontFamily: 'Segoe',
+          fontSize: 12,
+          height: 1.333,
+          color: Colors.white,
         ),
-        lineBodyWidth: 344,
-        overflowVerticalPadding: 16,
-        prefixPanelColor: Colors.black.withOpacity(0.68),
+        gradientTextColor: const Color(0xffc3e2f9),
+        codePanelBorder: Border.all(
+          color: Colors.white,
+          width: 1,
+        ),
+        borderRadius: 8.0,
         materialTheme: ThemeData(
           visualDensity: VisualDensity.adaptivePlatformDensity,
           buttonTheme: ButtonThemeData(
             buttonColor: Colors.black.withOpacity(0.68),
-          )
+          ),
         ),
         child: child,
       ),

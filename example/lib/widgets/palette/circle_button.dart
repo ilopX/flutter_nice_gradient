@@ -49,19 +49,23 @@ class _CircleButtonState extends State<CircleButton> {
   Widget buildOval(BuildContext context) {
     var theme = AppTheme.of(context);
     return Container(
-      margin: theme.circleButtonMargin,
-      child: ClipOval(
-        child: Container(
-          width: theme.circleButtonSize,
-          height: theme.circleButtonSize,
-          decoration:
-              widget.isSelected ? _selectedDecoration : _normalDecoration,
-          child: buildMouseDetector(
-            onTap: () {
-              if (widget.onTap != null) {
-                widget.onTap(widget.gradient);
-              }
-            },
+//      margin: theme.circleButtonMargin,
+      width: theme.prefixPanelWidth,
+      height: theme.overflowHeight,
+      child: Center(
+        child: ClipOval(
+          child: Container(
+            width: theme.circleButtonSize,
+            height: theme.circleButtonSize,
+            decoration:
+                widget.isSelected ? _selectedDecoration : _normalDecoration,
+            child: buildMouseDetector(
+              onTap: () {
+                if (widget.onTap != null) {
+                  widget.onTap(widget.gradient);
+                }
+              },
+            ),
           ),
         ),
       ),

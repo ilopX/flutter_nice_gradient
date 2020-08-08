@@ -43,7 +43,7 @@ class PaletteState extends State<Palette> {
       itemBuilder: (context, index) {
         return isLasOrFirst(index)
             ? SizedBox(
-                height: AppTheme.of(context).overflowVerticalPadding * 2,
+                height: 10,
               )
             : buildLine(niceGradients[index]);
       },
@@ -73,7 +73,7 @@ class PaletteState extends State<Palette> {
     );
   }
 
-  bool _isCodeVisible = false;
+  bool _isCodeVisible = true;
 
   bool get isCodeVisible => _isCodeVisible;
 

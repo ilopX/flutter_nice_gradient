@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 typedef ApplyPointCallback = void Function(String fist, String second);
 
-class GradientString {
+class GradientParser {
   final LinearGradient gradient;
 
-  GradientString({this.gradient}) {
+  GradientParser({this.gradient}) {
     extractPoint(gradient.begin.toString(), (fist, second) {
       _beginX = fist.toString();
       _beginY = second.toString();
@@ -22,8 +22,8 @@ class GradientString {
       _color2 = second.toString();
     });
 
-    _stop1 = gradient.stops.first.toString();
-    _stop2 = gradient.stops.last.toString();
+    _stop1 = gradient.stops.first.toStringAsFixed(1);
+    _stop2 = gradient.stops.last.toStringAsFixed(1);
   }
 
   String _beginX;
@@ -68,11 +68,11 @@ class GradientString {
     }
 
     final regExp = RegExp('\\(($numberPattern|$colorPattern)\\)?(, '
-        '[^(]*($numberPattern|\\($colorPattern)\\))?');
+        '[^(]*($numberPattern|\\(($colorPattern))\\))?');
     var matchPoints = regExp.firstMatch(raw);
     try {
       final fistGroup = matchPoints.group(1);
-      final secondGroup = matchPoints.group(3);
+      final secondGroup = matchPoints.group(4) ?? matchPoints.group(3) ;
       apply(fistGroup, secondGroup);
     } catch (e) {
       apply(null, null);

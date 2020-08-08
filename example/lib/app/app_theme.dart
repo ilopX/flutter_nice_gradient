@@ -6,49 +6,43 @@ enum PaletteSide { Left, Right }
 class AppTheme extends InheritedWidget {
   final double scale;
   final double paletteSideMargin;
-  final double paletteTopMargin;
+  final double prefixPanelWidth;
   final double sphereSize;
   final double circleButtonSize;
-  final EdgeInsets circleButtonMargin;
-  final double lineBodyWidth;
-  final double overflowVerticalPadding;
-  final Color prefixPanelColor;
+  final double bodyPanelWidth;
+  final Color bodyPanelColor;
+  final TextStyle gradientTextStyle;
+  final Color gradientTextColor;
+  final Border codePanelBorder;
+  final double borderRadius;
 
   // auto calculate
   final double paletteWidth;
   final double overflowHeight;
   final double overflowPrefixPanelWidth;
-  final double lineHeight;
-
+  final double bodyPanelLeftPadding;
   final ThemeData materialTheme;
 
-  AppTheme( {
+  AppTheme({
     Key key,
     @required this.scale,
     @required this.paletteSideMargin,
-    @required this.paletteTopMargin,
+    @required this.prefixPanelWidth,
     @required this.sphereSize,
     @required this.circleButtonSize,
-    @required this.circleButtonMargin,
-    @required this.lineBodyWidth,
-    @required this.overflowVerticalPadding,
-    @required this.prefixPanelColor,
+    @required this.bodyPanelWidth,
+    @required this.bodyPanelColor,
     @required this.materialTheme,
+    @required this.gradientTextStyle,
+    @required this.gradientTextColor,
+    @required this.codePanelBorder,
+    @required this.borderRadius,
     @required child,
-  })  : paletteWidth = circleButtonMargin.left +
-            circleButtonMargin.right +
-            circleButtonSize +
-            lineBodyWidth,
-        lineHeight = circleButtonMargin.top +
-            circleButtonMargin.bottom +
-            circleButtonSize,
-        overflowPrefixPanelWidth = circleButtonMargin.left +
-            circleButtonMargin.right +
-            circleButtonSize,
-        overflowHeight = circleButtonMargin.top +
-            circleButtonMargin.bottom +
-            circleButtonSize +
-            overflowVerticalPadding * 2,
+  })  : this.bodyPanelLeftPadding = gradientTextStyle.fontSize,
+        overflowHeight =
+            gradientTextStyle.fontSize * (gradientTextStyle.height + 0.03) * 6,
+        paletteWidth = prefixPanelWidth + bodyPanelWidth,
+        overflowPrefixPanelWidth = prefixPanelWidth,
         super(key: key, child: child);
 
   static AppTheme of(BuildContext context) {
@@ -61,11 +55,13 @@ class AppTheme extends InheritedWidget {
         oldWidget.paletteSideMargin != paletteSideMargin ||
         oldWidget.sphereSize != sphereSize ||
         oldWidget.circleButtonSize != circleButtonSize ||
-        oldWidget.circleButtonMargin != circleButtonMargin ||
-        oldWidget.lineBodyWidth != lineBodyWidth ||
-        oldWidget.overflowVerticalPadding != overflowVerticalPadding ||
-        oldWidget.paletteTopMargin != overflowVerticalPadding ||
-        oldWidget.prefixPanelColor != prefixPanelColor;
+        oldWidget.bodyPanelWidth != bodyPanelWidth ||
+        oldWidget.bodyPanelColor != bodyPanelColor ||
+        oldWidget.prefixPanelWidth != prefixPanelWidth ||
+        oldWidget.gradientTextStyle != gradientTextStyle ||
+        oldWidget.gradientTextColor != gradientTextColor ||
+        oldWidget.codePanelBorder != codePanelBorder ||
+        oldWidget.borderRadius != borderRadius;
   }
 
   EdgeInsets getPaletteMargin(PaletteSide side) {

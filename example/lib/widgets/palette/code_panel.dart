@@ -1,4 +1,5 @@
-import 'package:example/model/gradient_string.dart';
+import 'package:example/services/gradient_parser.dart';
+import 'package:example/services/gradient_to_string.dart';
 import 'package:example/vendor/reverse_if.dart';
 import 'package:example/app/app_theme.dart';
 import 'package:example/widgets/palette/gradient_text_representation.dart';
@@ -22,14 +23,14 @@ class CodePanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
     return Container(
-      height: theme.lineHeight,
+      height: theme.overflowHeight,
       width: theme.paletteWidth,
       child: OverflowBox(
-        maxHeight: theme.overflowHeight,
+        maxHeight: theme.overflowHeight+theme.bodyPanelLeftPadding*2,
         child: Container(
           child: Row(
             children: [
-              buildPrefixPanel(context),
+              buildPrefixPanel(context, theme),
               buildTextPanel(context),
             ].reversedIf(side != PaletteSide.Left),
           ),
@@ -38,80 +39,92 @@ class CodePanel extends StatelessWidget {
     );
   }
 
-  Widget buildPrefixPanel(BuildContext context) {
+  Widget buildPrefixPanel(BuildContext context, AppTheme theme) {
     return Container(
-      width: AppTheme.of(context).overflowPrefixPanelWidth,
+      width: AppTheme
+          .of(context)
+          .overflowPrefixPanelWidth,
       decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: leftRadius(side != PaletteSide.Left)),
+          borderRadius: makeBorderRadius(side != PaletteSide.Left, theme)),
     );
   }
 
   Widget buildTextPanel(BuildContext context) {
+    final gradientParser = GradientParser(gradient: gradient);
+    final theme = AppTheme.of(context);
     return Expanded(
       child: Container(
-          padding: EdgeInsets.all(10),
-          constraints: BoxConstraints.expand(),
-          decoration: BoxDecoration(
-              color: AppTheme.of(context).prefixPanelColor,
-              border: Border.all(color: Colors.white, width: 1),
-              borderRadius: leftRadius(side == PaletteSide.Left)),
-          child: Stack(
-            children: [
-              GradientTextRepresentation(
-                gradientString: GradientString(gradient: gradient),
+        constraints: BoxConstraints.expand(),
+        decoration: BoxDecoration(
+            color: theme.bodyPanelColor,
+            border: theme.codePanelBorder,
+            borderRadius: makeBorderRadius(side == PaletteSide.Left, theme)),
+        child: Stack(
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: GradientTextRepresentation(
+                gradientString: GradientParser(gradient: gradient),
+                defaultTextStyle: theme.gradientTextStyle,
+                numberColor: theme.gradientTextColor,
               ),
-              buildCopyButton()
-            ],
-          )),
+            ),
+            buildCopyButton(theme, gradientParser)
+          ],
+        ),
+      ),
     );
   }
 
-  leftRadius(bool reverse) {
-    return reverse ? rightBorderRadius() : leftBorderRadius();
-  }
-
-  leftBorderRadius() {
-    return BorderRadius.only(
-      topLeft: Radius.circular(10),
-      bottomLeft: Radius.circular(10),
-    );
-  }
-
-  rightBorderRadius() {
-    return BorderRadius.only(
-      topRight: Radius.circular(10),
-      bottomRight: Radius.circular(10),
-    );
-  }
-
-  buildCopyButton() {
+  buildCopyButton(AppTheme theme, GradientParser gradientParser) {
     return Align(
       alignment: Alignment.bottomRight,
       child: Opacity(
         opacity: 0.31,
-        child: RawMaterialButton(
-
-          child: Text('Copy'),
-          constraints: BoxConstraints.tight(Size(42, 26)),
-          shape: RoundedRectangleBorder(
-            side:  BorderSide(color: Colors.white),
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+        child: Padding(
+          padding: EdgeInsets.all(theme.bodyPanelLeftPadding),
+          child: RawMaterialButton(
+            child: Text('Copy'),
+            constraints: BoxConstraints.tight(Size(42, 26)),
+            shape: RoundedRectangleBorder(
+              side: BorderSide(color: Colors.white),
+              borderRadius: BorderRadius.all(
+                  Radius.circular(theme.borderRadius)),
+            ),
+            fillColor: Colors.black,
+            textStyle: theme.gradientTextStyle,
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            onPressed: () async {
+              final gradientConverter = GradientToString(
+                  gradientParser: gradientParser);
+              final clipboardData = ClipboardData(
+                  text: gradientConverter.toString());
+              await Clipboard.setData(clipboardData);
+              final i = 0.0;
+              print(i.toStringAsFixed(1));
+            },
           ),
-          fillColor: Colors.black,
-          textStyle: TextStyle(
-            fontSize: 12,
-            fontFamily: 'Segoe',
-            color: Colors.white,
-          ),
-
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          onPressed: () async {
-            final clipboardData = ClipboardData(text: gradient.toString());
-            await Clipboard.setData(clipboardData);
-          },
         ),
       ),
+    );
+  }
+
+  makeBorderRadius(bool reverse, AppTheme theme) {
+    return reverse ? makeRightBorderRadius(theme) : makeLeftBorderRadius(theme);
+  }
+
+  makeLeftBorderRadius(AppTheme theme) {
+    return BorderRadius.only(
+      topLeft: Radius.circular(theme.borderRadius),
+      bottomLeft: Radius.circular(theme.borderRadius),
+    );
+  }
+
+  makeRightBorderRadius(AppTheme theme) {
+    return BorderRadius.only(
+      topRight: Radius.circular(theme.borderRadius),
+      bottomRight: Radius.circular(theme.borderRadius),
     );
   }
 }

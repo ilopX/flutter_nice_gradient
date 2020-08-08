@@ -1,7 +1,6 @@
 import 'package:example/app/app_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:adobe_xd/gradient_xd_transform.dart';
 import 'package:path_drawing/path_drawing.dart';
 
 // topLeftGlass

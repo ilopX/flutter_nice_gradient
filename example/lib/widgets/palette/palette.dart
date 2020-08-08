@@ -24,12 +24,13 @@ class Palette extends StatefulWidget {
 class PaletteState extends State<Palette> {
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context);
     return Align(
       alignment: align,
       child: Container(
-        margin: AppTheme.of(context).getPaletteMargin(widget.side),
-        width: AppTheme.of(context).paletteWidth,
-        child: buildGradientList(),
+        margin: theme.getPaletteMargin(widget.side),
+        width: theme.paletteWidth,
+        child: buildGradientList(theme),
       ),
     );
   }
@@ -37,13 +38,13 @@ class PaletteState extends State<Palette> {
   Alignment get align =>
       widget.side == PaletteSide.Left ? Alignment.topLeft : Alignment.topRight;
 
-  Widget buildGradientList() {
+  Widget buildGradientList(AppTheme theme) {
     return ListView.builder(
       itemCount: niceGradients.length,
       itemBuilder: (context, index) {
         return isLasOrFirst(index)
             ? SizedBox(
-                height: 10,
+                height: theme.bodyPanelLeftPadding*2,
               )
             : buildLine(niceGradients[index]);
       },

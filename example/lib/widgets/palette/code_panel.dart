@@ -1,11 +1,10 @@
 import 'package:example/services/gradient_parser.dart';
-import 'package:example/services/gradient_to_string.dart';
 import 'package:example/vendor/reverse_if.dart';
 import 'package:example/app/app_theme.dart';
-import 'package:example/widgets/palette/gradient_text_representation.dart';
+import 'package:example/widgets/palette/button.dart';
+import 'package:example/widgets/palette/gradient_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class CodePanel extends StatelessWidget {
   final LinearGradient gradient;
@@ -26,7 +25,7 @@ class CodePanel extends StatelessWidget {
       height: theme.overflowHeight,
       width: theme.paletteWidth,
       child: OverflowBox(
-        maxHeight: theme.overflowHeight+theme.bodyPanelLeftPadding*2,
+        maxHeight: theme.overflowHeight + theme.bodyPanelLeftPadding * 2,
         child: Container(
           child: Row(
             children: [
@@ -41,12 +40,11 @@ class CodePanel extends StatelessWidget {
 
   Widget buildPrefixPanel(BuildContext context, AppTheme theme) {
     return Container(
-      width: AppTheme
-          .of(context)
-          .overflowPrefixPanelWidth,
+      width: theme.overflowPrefixPanelWidth,
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: makeBorderRadius(side != PaletteSide.Left, theme)),
+        color: Colors.white,
+        borderRadius: makeBorderRadius(side != PaletteSide.Left, theme),
+      ),
     );
   }
 
@@ -64,47 +62,20 @@ class CodePanel extends StatelessWidget {
           children: [
             Align(
               alignment: Alignment.centerLeft,
-              child: GradientTextRepresentation(
+              child: GradientText(
                 gradientString: GradientParser(gradient: gradient),
                 defaultTextStyle: theme.gradientTextStyle,
                 numberColor: theme.gradientTextColor,
               ),
             ),
-            buildCopyButton(theme, gradientParser)
-          ],
-        ),
-      ),
-    );
-  }
-
-  buildCopyButton(AppTheme theme, GradientParser gradientParser) {
-    return Align(
-      alignment: Alignment.bottomRight,
-      child: Opacity(
-        opacity: 0.31,
-        child: Padding(
-          padding: EdgeInsets.all(theme.bodyPanelLeftPadding),
-          child: RawMaterialButton(
-            child: Text('Copy'),
-            constraints: BoxConstraints.tight(Size(42, 26)),
-            shape: RoundedRectangleBorder(
-              side: BorderSide(color: Colors.white),
-              borderRadius: BorderRadius.all(
-                  Radius.circular(theme.borderRadius)),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Padding(
+                padding: EdgeInsets.all(theme.bodyPanelLeftPadding),
+                child: Button(gradientParser: gradientParser),
+              ),
             ),
-            fillColor: Colors.black,
-            textStyle: theme.gradientTextStyle,
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            onPressed: () async {
-              final gradientConverter = GradientToString(
-                  gradientParser: gradientParser);
-              final clipboardData = ClipboardData(
-                  text: gradientConverter.toString());
-              await Clipboard.setData(clipboardData);
-              final i = 0.0;
-              print(i.toStringAsFixed(1));
-            },
-          ),
+          ],
         ),
       ),
     );

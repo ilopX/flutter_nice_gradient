@@ -16,7 +16,7 @@ class Config extends StatelessWidget {
         Provider(create: (_) => Model()),
       ],
       child: AppTheme(
-        scale: 1,
+        scale: 1.0,
         paletteSideMargin: 19,
         sphereSize: 389,
         circleButtonSize: 46,

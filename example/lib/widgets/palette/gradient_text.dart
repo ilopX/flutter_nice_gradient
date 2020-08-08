@@ -3,28 +3,34 @@ import 'package:example/services/gradient_parser.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class GradientTextRepresentation extends StatelessWidget {
+class GradientText extends StatelessWidget {
   final GradientParser gradientString;
   final TextStyle defaultTextStyle;
   final Color numberColor;
   final TextStyle _numberTextStyle;
 
-  GradientTextRepresentation({
+  GradientText({
     Key key,
     @required this.gradientString,
     @required this.defaultTextStyle,
     @required this.numberColor
-  })  : _numberTextStyle = defaultTextStyle.copyWith(color: numberColor),
+  })
+      : _numberTextStyle = defaultTextStyle.copyWith(color: numberColor),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final linesLen = 6;
+    final textHeight = defaultTextStyle.fontSize * defaultTextStyle.height *
+        linesLen;
+    final fixHeight = defaultTextStyle.fontSize / 3;
     return Container(
       alignment: Alignment.centerLeft,
-      height: defaultTextStyle.fontSize * defaultTextStyle.height * 6 + defaultTextStyle.fontSize /2,
-//      color: Colors.white.withOpacity(0.2),
+      height: textHeight+fixHeight,
       child: SingleChildScrollView(
-        padding: EdgeInsets.only(left: AppTheme.of(context).bodyPanelLeftPadding),
+        padding: EdgeInsets.only(left: AppTheme
+            .of(context)
+            .bodyPanelLeftPadding),
         scrollDirection: Axis.horizontal,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

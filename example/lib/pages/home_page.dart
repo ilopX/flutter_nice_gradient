@@ -25,7 +25,7 @@ class HomePage extends StatelessWidget {
             onPressed: () async {
               if (kIsWeb) {
                 html.document.window.location.href =
-                    'https://ilopx.github.io/flutter_nice_gradient_platform_web';
+                    'https://github.com/ilopX/flutter_nice_gradient/tree/master/example';
               }
             },
           ),

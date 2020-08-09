@@ -3,8 +3,11 @@ import 'package:example/components/left_palette_component.dart';
 import 'package:example/components/main_bg_component.dart';
 import 'package:example/components/right_palette_component.dart';
 import 'package:example/components/sphere_component.dart';
+import 'package:example/widgets/git_hub_button.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:universal_html/prefer_universal/html.dart' as html;
 
 class HomePage extends StatelessWidget {
   @override
@@ -13,14 +16,20 @@ class HomePage extends StatelessWidget {
       scaleFactor: 1,
       context: context,
       child: Scaffold(
-        body: Stack(
-          children: [
-            MainBgComponent(),
-            SphereComponent(),
-            LeftPaletteComponent(),
-            RightPaletteComponent()
-          ],
-        ),
+        body: Stack(children: [
+          MainBgComponent(),
+          SphereComponent(),
+          LeftPaletteComponent(),
+          RightPaletteComponent(),
+          GitHubButton(
+            onPressed: () async {
+              if (kIsWeb) {
+                html.document.window.location.href =
+                    'https://ilopx.github.io/flutter_nice_gradient_platform_web';
+              }
+            },
+          ),
+        ]),
       ),
     );
   }

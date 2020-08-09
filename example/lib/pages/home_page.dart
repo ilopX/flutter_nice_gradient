@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return buildScale(
-      scaleFactor: 1,
+      scaleFactor:  AppTheme.of(context).scale,
       context: context,
       child: Scaffold(
         body: Stack(children: [
@@ -35,7 +35,6 @@ class HomePage extends StatelessWidget {
   }
 
   buildScale({BuildContext context, double scaleFactor, Widget child}) {
-    final scaleFactor = AppTheme.of(context).scale;
     final fraction = 1 / scaleFactor;
     return FractionallySizedBox(
       widthFactor: fraction,

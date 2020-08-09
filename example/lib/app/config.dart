@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:example/app/app_theme.dart';
 import 'package:example/model/model.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,33 +17,37 @@ class Config extends StatelessWidget {
       providers: [
         Provider(create: (_) => Model()),
       ],
-      child: AppTheme(
-        scale: 1.0,
-        paletteSideMargin: 19,
-        sphereSize: 389,
-        circleButtonSize: 46,
-        prefixPanelWidth: 100,
-        bodyPanelWidth: 344,
-        bodyPanelColor: Colors.black.withOpacity(0.68),
-        gradientTextStyle: const TextStyle(
-          fontFamily: 'Segoe',
-          fontSize: 12,
-          height: 1.333,
-          color: Colors.white,
-        ),
-        gradientTextColor: const Color(0xffc3e2f9),
-        codePanelBorder: Border.all(
-          color: Colors.white,
-          width: 1,
-        ),
-        borderRadius: 8.0,
-        materialTheme: ThemeData(
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          buttonTheme: ButtonThemeData(
-            buttonColor: Colors.black.withOpacity(0.68),
-          ),
-        ),
-        child: child,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return AppTheme(
+            scale:  min(constraints.maxWidth / 1000, 1),
+            paletteSideMargin: 19,
+            sphereSize: 389,
+            circleButtonSize: 46,
+            prefixPanelWidth: 100,
+            bodyPanelWidth: 344,
+            bodyPanelColor: Colors.black.withOpacity(0.68),
+            gradientTextStyle: const TextStyle(
+              fontFamily: 'Segoe',
+              fontSize: 12,
+              height: 1.333,
+              color: Colors.white,
+            ),
+            gradientTextColor: const Color(0xffc3e2f9),
+            codePanelBorder: Border.all(
+              color: Colors.white,
+              width: 1,
+            ),
+            borderRadius: 8.0,
+            materialTheme: ThemeData(
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+              buttonTheme: ButtonThemeData(
+                buttonColor: Colors.black.withOpacity(0.68),
+              ),
+            ),
+            child: child,
+          );
+        },
       ),
     );
   }

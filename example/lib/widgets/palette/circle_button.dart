@@ -103,9 +103,12 @@ class _CircleButtonState extends State<CircleButton> {
           _isHover = false;
         });
       },
-      child: GestureDetector(
-        onTap: onTap,
-        child: child,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          child: child,
+        ),
       ),
     );
   }

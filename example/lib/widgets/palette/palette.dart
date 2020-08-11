@@ -22,6 +22,16 @@ class Palette extends StatefulWidget {
 }
 
 class PaletteState extends State<Palette> {
+  bool _isCodeVisible = true;
+
+  bool get isCodeVisible => _isCodeVisible;
+
+  set isCodeVisible(bool visible) {
+    setState(() {
+      _isCodeVisible = visible;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
@@ -43,9 +53,7 @@ class PaletteState extends State<Palette> {
       itemCount: niceGradients.length,
       itemBuilder: (context, index) {
         return isLasOrFirst(index)
-            ? SizedBox(
-                height: theme.bodyPanelLeftPadding*2,
-              )
+            ? SizedBox(height: theme.bodyPanelLeftPadding * 2)
             : buildLine(niceGradients[index]);
       },
     );
@@ -55,10 +63,7 @@ class PaletteState extends State<Palette> {
     return Stack(
       children: [
         if (isCodeVisible && widget.selectedGradient == gradient)
-          CodePanel(
-            side: widget.side,
-            gradient: widget.selectedGradient
-          ),
+          CodePanel(side: widget.side, gradient: widget.selectedGradient),
         buildCircleButton(gradient),
       ],
     );
@@ -72,16 +77,6 @@ class PaletteState extends State<Palette> {
       onTap: widget.onPickGradient,
       onShowCodePanel: (isVisible) => isCodeVisible = isVisible,
     );
-  }
-
-  bool _isCodeVisible = true;
-
-  bool get isCodeVisible => _isCodeVisible;
-
-  set isCodeVisible(bool visible) {
-    setState(() {
-      _isCodeVisible = visible;
-    });
   }
 
   bool isLasOrFirst(index) {

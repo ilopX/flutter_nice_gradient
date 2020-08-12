@@ -1,97 +1,169 @@
+import 'package:adobe_xd/adobe_xd.dart';
 import 'package:example/app/app_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path_drawing/path_drawing.dart';
 
-// topLeftGlass
-// topRightGlass
-// bottomGlass
-
-class Sphere extends StatelessWidget {
+class Sphere extends StatefulWidget {
   final Gradient gradient;
 
-  const Sphere({Key key, @required this.gradient}) : super(key: key);
+  const Sphere({
+    Key key,
+    @required this.gradient,
+  }) : super(key: key);
+
+  @override
+  _SphereState createState() => _SphereState();
+}
+
+class _SphereState extends State<Sphere> {
+  bool _isGlassShow = true;
+
+  set isGlassShow(isVisible) {
+    setState(() {
+      _isGlassShow = isVisible;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final size = AppTheme.of(context).sphereSize;
 
-    return Container(
-        constraints: BoxConstraints.expand(),
-        alignment: Alignment.center,
-        child: Stack(
-          children: [
-            Transform.translate(
-              offset: Offset(94,363),
-              child: Opacity(
-                opacity: 0.8,
-                child: Image(
-                  image: AssetImage('assets/Shadow.png'),
-                ),
-              ),
-            ),
-            CustomPaint(
-              size: Size(size, size),
-              painter: SpherePainter(gradient),
-            ),
-            Transform.translate(
-              offset: Offset(14,28),
-              child: Image(
-                image: AssetImage('assets/ShadowFront.png'),
-              ),
-            ),
-          ],
-        ));
+    return Align(
+      alignment: Alignment.center,
+      child: Stack(
+        children: [
+          buildBackShadow(),
+          buildSphere(size),
+          buildFrontShadow(),
+          buildClickableArea(size),
+        ],
+      ),
+    );
+  }
+
+  Widget buildBackShadow() {
+    return Transform.translate(
+      offset: Offset(94, 363),
+      child: Opacity(
+        opacity: 0.8,
+        child: Image(
+          image: AssetImage('assets/Shadow.png'),
+        ),
+      ),
+    );
+  }
+
+  Widget buildFrontShadow() {
+    return Transform.translate(
+      offset: Offset(14, 28),
+      child: Image(
+        image: AssetImage('assets/ShadowFront.png'),
+      ),
+    );
+  }
+
+  buildClickableArea(double size) {
+    return ClipOval(
+      child: Container(
+        width: size,
+        height: size,
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () {
+              isGlassShow = !_isGlassShow;
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildSphere(double size) {
+    return CustomPaint(
+      size: Size(size, size),
+      painter: SpherePainter(widget.gradient, _isGlassShow),
+    );
   }
 }
 
 class SpherePainter extends CustomPainter {
   final mainRect = Rect.fromLTWH(0, 0, 362.0, 362.0);
   final Gradient gradient;
+  final bool isGlassShow;
 
-  SpherePainter(this.gradient);
+  SpherePainter(this.gradient, this.isGlassShow);
 
   @override
   void paint(Canvas canvas, Size size) {
-    final scale = size.width / mainRect.width;
+    rescale(canvas, size.width);
+
+    // paint shadow error:
+    // https://github.com/AdobeXD/xd-to-flutter-plugin/issues/70
+    // drawBackShadow(canvas);
+
+    drawGradientCircle(canvas);
+
+    if (isGlassShow) {
+      drawGlass(canvas);
+    }
+
+    // draw shadow error:
+    // https://github.com/AdobeXD/xd-to-flutter-plugin/issues/70
+    // drawFrontShadow(canvas);
+  }
+
+  void rescale(Canvas canvas, double width) {
+    final scale = width / mainRect.width;
     canvas.scale(scale);
+  }
 
-    // build shadow error: https://github.com/AdobeXD/xd-to-flutter-plugin/issues/70
-//    final bottomShadowGradient = RadialGradient(
-//      center: Alignment(0.0, 0.0),
-//      radius: 0.5,
-//      colors: [
-//        const Color(0xff000000),
-//        const Color(0x00000000),
-//      ],
-//      stops: [0.0, 1.0],
-//      transform: GradientXDTransform(
-//        1.0,
-//        0.0,
-//        0.0,
-//        1.0,
-//        0.0,
-//        0.0,
-//        Alignment(0.0, 0.0),
-//      ),
-//    );
-//
-//    final shadowRect = Rect.fromLTWH(80, 333, 201, 58);
-//    canvas.drawOval(shadowRect,
-//        Paint()..shader = bottomShadowGradient.createShader(shadowRect));
-//
-//    canvas.drawShadow(
-//        Path()
-//          ..addOval(mainRect)
-//          ..close(),
-//        Color(0x4da8a8a8),
-//        30,
-//        true);
-
-
+  void drawGradientCircle(Canvas canvas) {
     final shader = gradient.createShader(mainRect);
     canvas.drawOval(mainRect, Paint()..shader = shader);
+  }
 
+  void drawBackShadow(Canvas canvas) {
+    final bottomShadowGradient = RadialGradient(
+      center: Alignment(0.0, 0.0),
+      radius: 0.5,
+      colors: [
+        const Color(0xff000000),
+        const Color(0x00000000),
+      ],
+      stops: [0.0, 1.0],
+      transform: GradientXDTransform(
+        1.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        Alignment(0.0, 0.0),
+      ),
+    );
+
+    final shadowRect = Rect.fromLTWH(80, 333, 201, 58);
+    canvas.drawOval(shadowRect,
+        Paint()..shader = bottomShadowGradient.createShader(shadowRect));
+
+    canvas.drawShadow(
+        Path()
+          ..addOval(mainRect)
+          ..close(),
+        Color(0x4da8a8a8),
+        30,
+        true);
+  }
+
+  @override
+  bool shouldRepaint(SpherePainter oldDelegate) {
+    return oldDelegate.gradient != gradient ||
+        oldDelegate.isGlassShow != isGlassShow;
+  }
+
+  void drawGlass(Canvas canvas) {
     final svgPath1 =
         '''M -6916.9140625 4907.205078125 C -6916.9140625 4907.205078125 -6915.54931640625 4868.74560546875 -6898.255859375 4839.39111328125 C -6880.9609375 4810.03466796875 -6847.7373046875 4789.78125 -6847.7373046875 4789.78125 C -6847.7373046875 4789.78125 -6833.74169921875 4793.19580078125 -6819.0634765625 4804.80078125 C -6804.3837890625 4816.4072265625 -6789.0244140625 4836.20458984375 -6789.0244140625 4836.20458984375 C -6789.0244140625 4836.20458984375 -6811.7802734375 4857.8212890625 -6825.890625 4881.71728515625 C -6839.99951171875 4905.611328125 -6842.7294921875 4932.23779296875 -6842.7294921875 4932.23779296875 C -6842.7294921875 4932.23779296875 -6860.59423828125 4929.84716796875 -6879.1396484375 4923.58935546875 C -6897.6845703125 4917.33154296875 -6916.9140625 4907.205078125 -6916.9140625 4907.205078125 Z''';
     final svgPath2 =
@@ -116,28 +188,24 @@ class SpherePainter extends CustomPainter {
       ..close();
 
     canvas.drawPath(path3, Paint()..color = Colors.white.withOpacity(0.23));
-
-    // build shadow error: https://github.com/AdobeXD/xd-to-flutter-plugin/issues/70
-//    final shadowGradient = RadialGradient(
-//      center: Alignment(0.0, 1.11),
-//      radius: 0.778,
-//      colors: [
-//        const Color(0x3d000000),
-//        const Color(0x25000000),
-//        const Color(0x01000000),
-//        const Color(0x00000000)
-//      ],
-//      stops: [0.0, 0.322, 0.707, 1.0],
-//      transform: GradientXDTransform(
-//          1.0, 0.0, 0.0, 0.302, 0.0, 0.738, Alignment(0.0, 1.11)),
-//    );
-//
-//    canvas.drawOval(
-//        mainRect, Paint()..shader = shadowGradient.createShader(mainRect));
   }
 
-  @override
-  bool shouldRepaint(SpherePainter oldDelegate) {
-    return oldDelegate.gradient != gradient;
+  void drawFrontShadow(Canvas canvas) {
+    final shadowGradient = RadialGradient(
+      center: Alignment(0.0, 1.11),
+      radius: 0.778,
+      colors: [
+        const Color(0x3d000000),
+        const Color(0x25000000),
+        const Color(0x01000000),
+        const Color(0x00000000)
+      ],
+      stops: [0.0, 0.322, 0.707, 1.0],
+      transform: GradientXDTransform(
+          1.0, 0.0, 0.0, 0.302, 0.0, 0.738, Alignment(0.0, 1.11)),
+    );
+
+    canvas.drawOval(
+        mainRect, Paint()..shader = shadowGradient.createShader(mainRect));
   }
 }

@@ -1,11 +1,17 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:process_run/shell.dart';
+import 'package:universal_html/prefer_universal/html.dart' as html;
+
 
 class GitHubButton extends StatelessWidget {
-  final void Function() onPressed;
+  final String sourceCodeUrl;
 
   const GitHubButton({
     Key key,
-    @required this.onPressed,
+    @required this.sourceCodeUrl,
   }) : super(key: key);
 
   @override
@@ -19,7 +25,14 @@ class GitHubButton extends StatelessWidget {
           child: Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: onPressed,
+              onTap: () async {
+                if (kIsWeb) {
+                  html.document.window.location.href = sourceCodeUrl;
+                } else {
+                  var shell = Shell();
+                  await shell.run('start $sourceCodeUrl');
+                }
+              },
               child: Container(
                 width: 85,
                 height: 51,

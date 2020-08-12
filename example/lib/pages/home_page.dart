@@ -1,7 +1,5 @@
 import 'package:example/app/app_theme.dart';
-import 'package:example/components/left_palette_component.dart';
 import 'package:example/components/main_bg_component.dart';
-import 'package:example/components/right_palette_component.dart';
 import 'package:example/components/sphere_component.dart';
 import 'package:example/widgets/git_hub_button.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,8 +17,8 @@ class HomePage extends StatelessWidget {
         body: Stack(children: [
           MainBgComponent(),
           SphereComponent(),
-          LeftPaletteComponent(),
-          RightPaletteComponent(),
+//          LeftPaletteComponent(),
+//          RightPaletteComponent(),
           GitHubButton(
             onPressed: () async {
               if (kIsWeb) {

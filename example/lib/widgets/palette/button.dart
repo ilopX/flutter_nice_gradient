@@ -34,7 +34,7 @@ class Button extends StatelessWidget {
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         onPressed: () {
           Provider.of<Model>(context, listen: false)
-              .copyGradientTextToClipboard(gradientParser);
+              .copyGradientToClipboard(gradientParser);
         },
       ),
     );

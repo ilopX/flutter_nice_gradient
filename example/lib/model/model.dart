@@ -8,7 +8,7 @@ class Model {
   final gradient = ValueNotifier(niceGradients[1]);
   final bgGradient = ValueNotifier(niceGradients[5]);
 
-  void copyGradientTextToClipboard(GradientParser gradientParser) async {
+  void copyGradientToClipboard(GradientParser gradientParser) async {
     final gradientConverter = GradientToString(gradientParser: gradientParser);
     final gradientText = gradientConverter.toString();
     final clipboardData = ClipboardData(text: gradientText);

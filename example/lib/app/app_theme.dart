@@ -15,15 +15,16 @@ class AppTheme extends InheritedWidget {
   final Color gradientTextColor;
   final Border codePanelBorder;
   final double borderRadius;
+  final double codePanelAddHeight;
 
   // auto calculate
   final double paletteWidth;
   final double overflowHeight;
   final double overflowPrefixPanelWidth;
-  final double bodyPanelLeftPadding;
+  final double bodyPanelTopLeftBottomPadding;
   final ThemeData materialTheme;
 
-  AppTheme({
+  AppTheme( {
     Key key,
     @required this.scale,
     @required this.paletteSideMargin,
@@ -37,10 +38,12 @@ class AppTheme extends InheritedWidget {
     @required this.gradientTextColor,
     @required this.codePanelBorder,
     @required this.borderRadius,
+    @required this.codePanelAddHeight,
     @required child,
-  })  : this.bodyPanelLeftPadding = gradientTextStyle.fontSize,
-        overflowHeight =
-            gradientTextStyle.fontSize * (gradientTextStyle.height + 0.03) * 6,
+  })
+      : this.bodyPanelTopLeftBottomPadding = gradientTextStyle.fontSize,
+        overflowHeight =  gradientTextStyle.fontSize *
+            (gradientTextStyle.height + 0.03) * 6,
         paletteWidth = prefixPanelWidth + bodyPanelWidth,
         overflowPrefixPanelWidth = prefixPanelWidth,
         super(key: key, child: child);
@@ -48,6 +51,7 @@ class AppTheme extends InheritedWidget {
   static AppTheme of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<AppTheme>();
   }
+
 
   @override
   bool updateShouldNotify(AppTheme oldWidget) {
@@ -61,7 +65,8 @@ class AppTheme extends InheritedWidget {
         oldWidget.gradientTextStyle != gradientTextStyle ||
         oldWidget.gradientTextColor != gradientTextColor ||
         oldWidget.codePanelBorder != codePanelBorder ||
-        oldWidget.borderRadius != borderRadius;
+        oldWidget.borderRadius != borderRadius ||
+        oldWidget.codePanelAddHeight != codePanelAddHeight;
   }
 
   EdgeInsets getPaletteMargin(PaletteSide side) {

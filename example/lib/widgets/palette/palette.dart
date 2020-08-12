@@ -53,7 +53,7 @@ class PaletteState extends State<Palette> {
       itemCount: niceGradients.length,
       itemBuilder: (context, index) {
         return isLasOrFirst(index)
-            ? SizedBox(height: theme.bodyPanelLeftPadding * 2)
+            ? SizedBox(height: theme.bodyPanelTopLeftBottomPadding * 2)
             : buildLine(niceGradients[index]);
       },
     );

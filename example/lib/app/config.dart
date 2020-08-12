@@ -20,12 +20,13 @@ class Config extends StatelessWidget {
       child: LayoutBuilder(
         builder: (context, constraints) {
           return AppTheme(
-            scale:  min(constraints.maxWidth / 1000, 1),
+            scale: scaleIfWidthLess(1000, constraints),
             paletteSideMargin: 19,
             sphereSize: 389,
             circleButtonSize: 46,
             prefixPanelWidth: 100,
             bodyPanelWidth: 344,
+            codePanelAddHeight: 0,
             bodyPanelColor: Colors.black.withOpacity(0.68),
             gradientTextStyle: const TextStyle(
               fontFamily: 'Segoe',
@@ -50,5 +51,9 @@ class Config extends StatelessWidget {
         },
       ),
     );
+  }
+
+  double scaleIfWidthLess(int i, BoxConstraints constraints) {
+    return min(constraints.maxWidth / 1000, 1);
   }
 }

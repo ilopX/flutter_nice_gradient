@@ -21,19 +21,28 @@ class CodePanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
+    return buildOverflow(
+      theme: theme,
+      child: Row(
+        children: [
+          buildPrefixPanel(context, theme),
+          buildBodyPanel(context),
+        ].reversedIf(side != PaletteSide.Left),
+      ),
+    );
+  }
+
+  Widget buildOverflow({@required AppTheme theme, @required Widget child}) {
+    final realHeight = theme.overflowHeight +
+        theme.bodyPanelTopLeftBottomPadding * 2 +
+        theme.codePanelAddHeight;
+
     return Container(
       height: theme.overflowHeight,
       width: theme.paletteWidth,
       child: OverflowBox(
-        maxHeight: theme.overflowHeight + theme.bodyPanelLeftPadding * 2,
-        child: Container(
-          child: Row(
-            children: [
-              buildPrefixPanel(context, theme),
-              buildTextPanel(context),
-            ].reversedIf(side != PaletteSide.Left),
-          ),
-        ),
+        maxHeight: realHeight,
+        child: child,
       ),
     );
   }
@@ -48,33 +57,21 @@ class CodePanel extends StatelessWidget {
     );
   }
 
-  Widget buildTextPanel(BuildContext context) {
+  Widget buildBodyPanel(BuildContext context) {
     final gradientParser = GradientParser(gradient: gradient);
     final theme = AppTheme.of(context);
+
     return Expanded(
       child: Container(
-        constraints: BoxConstraints.expand(),
         decoration: BoxDecoration(
-            color: theme.bodyPanelColor,
-            border: theme.codePanelBorder,
-            borderRadius: makeBorderRadius(side == PaletteSide.Left, theme)),
+          color: theme.bodyPanelColor,
+          border: theme.codePanelBorder,
+          borderRadius: makeBorderRadius(side == PaletteSide.Left, theme),
+        ),
         child: Stack(
           children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: GradientText(
-                gradientString: GradientParser(gradient: gradient),
-                defaultTextStyle: theme.gradientTextStyle,
-                numberColor: theme.gradientTextColor,
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Padding(
-                padding: EdgeInsets.all(theme.bodyPanelLeftPadding),
-                child: Button(gradientParser: gradientParser),
-              ),
-            ),
+            buildRichText(theme, gradientParser),
+            buildCopyButton(theme, gradientParser),
           ],
         ),
       ),
@@ -96,6 +93,27 @@ class CodePanel extends StatelessWidget {
     return BorderRadius.only(
       topRight: Radius.circular(theme.borderRadius),
       bottomRight: Radius.circular(theme.borderRadius),
+    );
+  }
+
+  Widget buildCopyButton(AppTheme theme, GradientParser gradientParser) {
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: Padding(
+        padding: EdgeInsets.all(theme.bodyPanelTopLeftBottomPadding),
+        child: Button(gradientParser: gradientParser),
+      ),
+    );
+  }
+
+  buildRichText(AppTheme theme, GradientParser gradientParser) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: GradientText(
+        gradientString: gradientParser,
+        defaultTextStyle: theme.gradientTextStyle,
+        numberColor: theme.gradientTextColor,
+      ),
     );
   }
 }

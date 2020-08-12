@@ -30,7 +30,7 @@ class GradientText extends StatelessWidget {
       child: SingleChildScrollView(
         padding: EdgeInsets.only(left: AppTheme
             .of(context)
-            .bodyPanelLeftPadding),
+            .bodyPanelTopLeftBottomPadding),
         scrollDirection: Axis.horizontal,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

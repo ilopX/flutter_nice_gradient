@@ -1,6 +1,6 @@
 import 'package:example/model/model.dart';
 import 'package:example/vendor/consume_value_notifier.dart';
-import 'package:example/widgets/sphere.dart';
+import 'package:example/widgets/sphere/sphere.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

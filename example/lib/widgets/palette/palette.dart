@@ -49,21 +49,23 @@ class PaletteState extends State<Palette> {
       widget.side == PaletteSide.Left ? Alignment.topLeft : Alignment.topRight;
 
   Widget buildGradientList(AppTheme theme) {
-    return ListView.builder(
-      itemCount: niceGradients.length,
-      itemBuilder: (context, index) {
-        return isLasOrFirst(index)
-            ? SizedBox(height: theme.bodyPanelTopLeftBottomPadding * 2)
-            : buildLine(niceGradients[index]);
-      },
+    return ListView(
+      children: [
+        buildVerticalPadding(theme),
+        ...niceGradients.map(buildLine),
+        buildVerticalPadding(theme),
+      ],
     );
   }
 
   Widget buildLine(LinearGradient gradient) {
     return Stack(
       children: [
-        if (isCodeVisible && widget.selectedGradient == gradient)
-          CodePanel(side: widget.side, gradient: widget.selectedGradient),
+        if (isCodePanelBuild(gradient))
+          CodePanel(
+            side: widget.side,
+            gradient: widget.selectedGradient,
+          ),
         buildCircleButton(gradient),
       ],
     );
@@ -80,6 +82,14 @@ class PaletteState extends State<Palette> {
   }
 
   bool isLasOrFirst(index) {
-    return index == 0 || index == niceGradients.length - 1;
+    return index == 0 || index == niceGradients.length + 1;
+  }
+
+  Widget buildVerticalPadding(AppTheme theme) {
+    return SizedBox(height: theme.bodyPanelTopLeftBottomPadding * 2);
+  }
+
+  bool isCodePanelBuild(LinearGradient gradient) {
+    return isCodeVisible && widget.selectedGradient == gradient;
   }
 }

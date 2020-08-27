@@ -9,12 +9,10 @@ import 'package:flutter/material.dart';
 class CodePanel extends StatelessWidget {
   final LinearGradient gradient;
   final PaletteSide side;
-  final void Function() onClose;
 
   const CodePanel({
     Key key,
     @required this.side,
-    @required this.onClose,
     @required this.gradient,
   }) : super(key: key);
 

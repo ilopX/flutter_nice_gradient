@@ -8,7 +8,6 @@ class CircleButton extends StatefulWidget {
   final void Function(LinearGradient setGradient) onTap;
   final void Function(bool isVisible) onShowCodePanel;
 
-
   const CircleButton({
     Key key,
     @required this.gradient,

@@ -1,4 +1,5 @@
-# flutter_nice_gradients
+# Flutter nice gradients
+My first experimental project in flutter
 [Online](https://ilopx.github.io/flutter_nice_gradient_platform_web)
 
 [
